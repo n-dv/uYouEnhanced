@@ -1,4 +1,4 @@
-// Template for whenever I refresh the main branch. and even need to re-add the submodules afterwards.
+# Template for whenever I refresh the main branch. and even need to re-add the submodules afterwards.
 
 name: Update Submodules
 
@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.4
 
       - name: Set up Git
         run: |
@@ -22,7 +22,9 @@ jobs:
         run: |
 #         git submodule add https://github.com/PoomSmart/FLEXing.git Tweaks/FLEXing
           git submodule add https://github.com/dayanch96/uYouLocalization.git Tweaks/uYouLocalization
-          git submodule add https://github.com/arichorn/YTHoldForSpeed.git Tweaks/YTHoldForSpeed
+          git submodule add https://github.com/arichornlover/YTHoldForSpeed.git Tweaks/YTHoldForSpeed
+          git submodule add https://github.com/arichornlover/YouGroupSettings.git Tweaks/YouGroupSettings
+          git submodule add https://github.com/arichornlover/YouTimeStamp.git Tweaks/YouTimeStamp
           git add .
           git commit -m "added uYouEnhanced submodules"
           git push origin
@@ -55,6 +57,8 @@ jobs:
           git add .
           git submodule update --init --recursive --remote Tweaks/YTABConfig
           git add .
+          git submodule update --init --recursive --remote Tweaks/YTClassicVideoQuality
+          git add .
           git submodule update --init --recursive --remote Tweaks/YTUHD
           git add .
           git submodule update --init --recursive --remote Tweaks/YTVideoOverlay
@@ -64,6 +68,8 @@ jobs:
           git submodule update --init --recursive --remote Tweaks/YouPiP
           git add .
           git submodule update --init --recursive --remote Tweaks/YouQuality
+          git add .
+          git submodule update --init --recursive --remote Tweaks/YouGroupSettings
           git add .
           git submodule update --init --recursive --remote Tweaks/YouTubeHeader
           git add .
@@ -81,6 +87,8 @@ jobs:
           ln -s ../Tweaks/MrBeastify/layout/Library/Application\ Support/MrBeastify.bundle MrBeastify.bundle
           ln -s ../Tweaks/uYouLocalization/layout/Library/Application\ Support/uYouLocalization.bundle uYouLocalization.bundle
           ln -s ../Tweaks/YTHoldForSpeed/layout/Library/Application\ Support/YTHoldForSpeed.bundle YTHoldForSpeed.bundle
+          ln -s ../Tweaks/YouGroupSettings/layout/Library/Application\ Support/YouGroupSettings.bundle YouGroupSettings.bundle
+          ln -s ../Tweaks/YouTimeStamp/layout/Library/Application\ Support/YouTimeStamp.bundle YouTimeStamp.bundle
           git add .
           git commit -m "Added bundles"
           git push origin
@@ -93,6 +101,8 @@ jobs:
 #         rm -f MrBeastify.bundle
 #         rm -f uYouLocalization.bundle
 #         rm -f YTHoldForSpeed.bundle
+#         rm -f YouGroupSettings.bundle
+#         rm -f YouTimeStamp.bundle
 #         git add .
 #         git commit -m "Deleted bundles"
 #         git push origin

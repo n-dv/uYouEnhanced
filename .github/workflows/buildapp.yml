@@ -16,6 +16,11 @@ on:
         default: "3.0.3"
         required: true
         type: string
+      uyouenhanced_version:
+        description: "The version of uYouEnhanced (Commit ID)"
+        default: ""
+        required: false
+        type: string
       decrypted_youtube_url:
         description: "The direct URL to the decrypted YouTube ipa"
         default: ""
@@ -49,7 +54,7 @@ concurrency:
 jobs:
   build:
     name: Build uYouEnhanced
-    runs-on: macos-latest
+    runs-on: macos-12
     permissions:
       contents: write
 
@@ -58,6 +63,7 @@ jobs:
         uses: actions/checkout@v4.1.1
         with:
           path: main
+          ref: ${{ github.event.inputs.uyouenhanced_version || github.ref }}
           submodules: recursive
 
       - name: Install Dependencies
@@ -129,8 +135,9 @@ jobs:
         id: build_package
         run: |
           cd ${{ github.workspace }}/main
-          sed -i '' "27s#.*#BUNDLE_ID = ${{ env.BUNDLE_ID }}#g" Makefile
-          sed -i '' "26s#.*#DISPLAY_NAME = ${{ env.APP_NAME }}#g" Makefile          
+          sed -i '' "27s#.*#BUNDLE_ID = ${{ env.BUNDLE_ID }}#g" Makefile                          # Modify the bundle ID
+          sed -i '' "26s#.*#DISPLAY_NAME = ${{ env.APP_NAME }}#g" Makefile                        # Modify the app name
+          sed -i '' "1s#.*#export TARGET = iphone:clang:${{ inputs.sdk_version }}:14.0#g" Makefile # Modify the SDK version
           make package THEOS_PACKAGE_SCHEME=rootless IPA=Payload/YouTube.app FINALPACKAGE=1
           echo "package=$(ls -t packages | head -n1)" >>$GITHUB_OUTPUT
           echo -e "==> \033[1mSHASUM256: $(shasum -a 256 packages/*.ipa | cut -f1 -d' ')\033[0m"

@@ -52,7 +52,7 @@
 "STOCK_VOLUME_HUD_DESC" = "";
  
 // Video controls overlay options
-"VIDEO_CONTROLS_OVERLAY_OPTIONS" = "📹 Video Kontrolleri Kaplaması Seçenekleri";
+"VIDEO_PLAYER_OPTIONS" = "📹 Video Kontrolleri Kaplaması Seçenekleri";
  
 "HIDE_AUTOPLAY_SWITCH" = "Otomatik oynatma anahtarını gizle";
 "HIDE_AUTOPLAY_SWITCH_DESC" = "Otomatik oynatma anahtarını video kontrolleri katmanından gizler.";
@@ -138,3 +138,6 @@
  
 "FIX_GOOGLE_SIGNIN" = "Google Oturumu Açma'yı düzeltin (yalnızca TrollStore kullanıcıları için)";
 "FIX_GOOGLE_SIGNIN_DESC" = "Bu seçeneği yalnızca Google hesabınızla oturum açamadığınızda ve uygulama TrollStore aracılığıyla yüklendiyse aç. Normal olarak giriş yapabiliyorsan, devre dışı bırak. Uygulamanın yeniden başlatılması gerekir.";
+
+"FAKE_YOUR_PREMIUM_BENEFITS" = "Your Premium benefits";
+"FAKE_DOWNLOADS" = "Downloads";

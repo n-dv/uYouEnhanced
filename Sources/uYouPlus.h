@@ -8,34 +8,42 @@
 #import <substrate.h>
 #import <rootless.h>
 
-#import "uYouPlusThemes.h"
-#import "Tweaks/YouTubeHeader/YTAppDelegate.h"
-#import "Tweaks/YouTubeHeader/YTIMenuConditionalServiceItemRenderer.h"
-#import "Tweaks/YouTubeHeader/YTVideoQualitySwitchOriginalController.h"
-#import "Tweaks/YouTubeHeader/YTIGuideResponse.h"
-#import "Tweaks/YouTubeHeader/YTIGuideResponseSupportedRenderers.h"
-#import "Tweaks/YouTubeHeader/YTIPivotBarSupportedRenderers.h"
-#import "Tweaks/YouTubeHeader/YTIPivotBarItemRenderer.h"
-#import "Tweaks/YouTubeHeader/YTIBrowseRequest.h"
-#import "Tweaks/YouTubeHeader/YTIButtonRenderer.h"
-#import "Tweaks/YouTubeHeader/YTIElementRenderer.h"
-#import "Tweaks/YouTubeHeader/YTISectionListRenderer.h"
-#import "Tweaks/YouTubeHeader/YTWatchNextResultsViewController.h"
-#import "Tweaks/YouTubeHeader/YTPlayerOverlay.h"
-#import "Tweaks/YouTubeHeader/YTPlayerOverlayProvider.h"
-#import "Tweaks/YouTubeHeader/YTReelWatchPlaybackOverlayView.h"
-#import "Tweaks/YouTubeHeader/YTInlinePlayerBarContainerView.h"
-#import "Tweaks/YouTubeHeader/YTInnerTubeCollectionViewController.h"
-#import "Tweaks/YouTubeHeader/YTPivotBarItemView.h"
+#import "uYouPlusThemes.h" // Hide "Buy Super Thanks" banner (_ASDisplayView)
+#import <YouTubeHeader/YTAppDelegate.h> // Activate FLEX
+#import <YouTubeHeader/YTIMenuConditionalServiceItemRenderer.h>
+#import <YouTubeHeader/YTIPlayerBarDecorationModel.h>
+#import <YouTubeHeader/YTPlayerBarRectangleDecorationView.h>
+#import <YouTubeHeader/YTVideoQualitySwitchOriginalController.h>
+#import <YouTubeHeader/YTIGuideResponse.h>
+#import <YouTubeHeader/YTIGuideResponseSupportedRenderers.h>
+#import <YouTubeHeader/YTIPivotBarSupportedRenderers.h>
+#import <YouTubeHeader/YTIPivotBarItemRenderer.h>
+#import <YouTubeHeader/YTIBrowseRequest.h>
+#import <YouTubeHeader/YTIButtonRenderer.h>
+#import <YouTubeHeader/YTIElementRenderer.h>
+#import <YouTubeHeader/YTISectionListRenderer.h>
+#import <YouTubeHeader/YTWatchNextResultsViewController.h>
+#import <YouTubeHeader/YTPlayerOverlay.h>
+#import <YouTubeHeader/YTPlayerOverlayProvider.h>
+#import <YouTubeHeader/YTReelWatchPlaybackOverlayView.h>
+#import <YouTubeHeader/YTInlinePlayerBarContainerView.h>
+#import <YouTubeHeader/YTInnerTubeCollectionViewController.h>
+#import <YouTubeHeader/YTPivotBarItemView.h>
+#import <YouTubeHeader/YTCollectionViewCell.h>
+#import <YouTubeHeader/YTIFormattedString.h>
+#import <YouTubeHeader/GPBMessage.h>
+#import <YouTubeHeader/YTIStringRun.h>
+#import <YouTubeHeader/YTWatchViewController.h>
+#import <YouTubeHeader/YTIPivotBarRenderer.h>
 
 // Hide buttons under the video player by @PoomSmart
-#import "Tweaks/YouTubeHeader/ASCollectionElement.h"
-#import "Tweaks/YouTubeHeader/ASCollectionView.h"
-#import "Tweaks/YouTubeHeader/ELMNodeController.h"
+#import <YouTubeHeader/ASCollectionElement.h>
+#import <YouTubeHeader/ASCollectionView.h>
+#import <YouTubeHeader/ELMNodeController.h>
 
 // YouTube-X
-#import "Tweaks/YouTubeHeader/YTVideoWithContextNode.h"
-#import "Tweaks/YouTubeHeader/ELMCellNode.h"
+#import <YouTubeHeader/YTVideoWithContextNode.h>
+#import <YouTubeHeader/ELMCellNode.h>
 
 #define LOC(x) [tweakBundle localizedStringForKey:x value:nil table:nil]
 #define IS_ENABLED(k) [[NSUserDefaults standardUserDefaults] boolForKey:k]
@@ -43,20 +51,92 @@
 #define YT_BUNDLE_ID @"com.google.ios.youtube"
 #define YT_NAME @"YouTube"
 #define DEFAULT_RATE 1.0f // YTSpeed
-#define LOWCONTRASTMODE_CUTOFF_VERSION @"17.38.10" // LowContrastMode
+#define LOWCONTRASTMODE_CUTOFF_VERSION @"17.38.10" // LowContrastMode (v17.33.2-17.38.10)
+
+// Always show remaining time in video player - @bhackel
+@interface YTInlinePlayerBarContainerView (uYouEnhanced)
+@property(nonatomic, assign) BOOL shouldDisplayTimeRemaining;
+@end
 
 // IAmYouTube
 @interface SSOConfiguration : NSObject
 @end
 
+// Disable Snap to chapter
+@interface YTSegmentableInlinePlayerBarView : UIView
+@property(nonatomic, assign) BOOL enableSnapToChapter;
+@end
+
 // Hide Double tap to seek Overlay
 @interface YTInlinePlayerDoubleTapIndicatorView : UIView
-@property (nonatomic, strong) UIView *_scrimOverlay;
+@property (nonatomic, strong) UIView *scrimOverlay;
+@property(nonatomic, strong) CABasicAnimation *uYouEnhancedBlankAlphaAnimation;
+@property(nonatomic, strong) CABasicAnimation *uYouEnhancedBlankColorAnimation;
+- (CABasicAnimation *)uYouEnhancedGetBlankColorAnimation;
+@end
+
+// Hide Home Tab - @bhackel
+@interface YTPivotBarItemViewAccessibilityControl : UIControl
+@end
+@interface YTPivotBarItemView (uYouEnhanced)
+@property (nonatomic, strong) YTPivotBarItemViewAccessibilityControl *hitTarget;
 @end
 
 // YTTapToSeek - https://github.com/bhackel/YTTapToSeek
 @interface YTMainAppVideoPlayerOverlayViewController : UIViewController
 - (CGFloat)totalTime;
+@end
+
+// Enable Premium logo - @bhackel
+@interface YTITopbarLogoRenderer : NSObject
+@property(readonly, nonatomic) YTIIcon *iconImage;
+@end
+
+// Hide Premium Promo in You tab - @bhackel
+@interface YTIIconThumbnailRenderer : GPBMessage
+@property (nonatomic, strong) YTIIcon *icon;
+- (BOOL)hasIcon;
+@end
+@interface YTICompactListItemThumbnailSupportedRenderers : GPBMessage
+@property (nonatomic, strong) YTIIconThumbnailRenderer *iconThumbnailRenderer;
+- (BOOL)hasIconThumbnailRenderer;
+@end
+@interface YTICompactListItemRenderer : GPBMessage
+@property (nonatomic, strong) YTICompactListItemThumbnailSupportedRenderers *thumbnail;
+@property (nonatomic, strong) YTIFormattedString *title;
+- (BOOL)hasThumbnail;
+- (BOOL)hasTitle;
+@end
+@interface YTIIcon (uYouEnhanced)
+- (BOOL)hasIconType;
+@end
+@interface YTICompactLinkRenderer : GPBMessage
+@property (nonatomic, strong) YTIIcon *icon;
+@property (nonatomic, strong) YTIFormattedString *title;
+@property (nonatomic, strong) YTICompactListItemThumbnailSupportedRenderers *thumbnail;
+- (BOOL)hasIcon;
+- (BOOL)hasThumbnail;
+@end
+@interface YTIItemSectionSupportedRenderers (uYouEnhanced)
+@property(readonly, nonatomic) YTICompactLinkRenderer *compactLinkRenderer;
+@property(readonly, nonatomic) YTICompactListItemRenderer *compactListItemRenderer;
+- (BOOL)hasCompactLinkRenderer;
+- (BOOL)hasCompactListItemRenderer;
+@end
+@interface YTAppCollectionViewController : YTInnerTubeCollectionViewController
+- (void)uYouEnhancedFakePremiumModel:(YTISectionListRenderer *)model;
+@end
+@interface YTInnerTubeCollectionViewController (uYouEnhanced)
+@property(readonly, nonatomic) YTISectionListRenderer *model;
+@end
+
+// Disable Pull to Full for landscape videos - @bhackel
+@interface YTWatchPullToFullController : NSObject
+@property(nonatomic, strong) YTWatchViewController *playerViewSource;
+@end
+@interface YTWatchViewController (uYouEnhanced)
+@property(nonatomic, strong) YTWatchPullToFullController *pullToFullController;
+- (NSUInteger)allowedFullScreenOrientations;
 @end
 
 // uYouPlus
@@ -70,6 +150,9 @@
 @interface YTChipCloudCell : UIView
 @end
 
+@interface YTCountView : UIView
+@end
+
 @interface YTPlayabilityResolutionUserActionUIController : NSObject // Skips content warning before playing *some videos - @PoomSmart
 - (void)confirmAlertDidPressConfirm;
 @end
@@ -79,6 +162,9 @@
 @end
 
 @interface YTTransportControlsButtonView : UIView
+@end
+
+@interface YTFullscreenActionsView : UIView
 @end
 
 @interface _ASCollectionViewCell : UICollectionViewCell
