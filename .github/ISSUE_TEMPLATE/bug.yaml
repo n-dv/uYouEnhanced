@@ -26,14 +26,14 @@ body:
 - type: input
   attributes:
     label: iOS/iPadOS version
-    placeholder: iOS 17.4
+    placeholder: iOS 18.0.0
   validations:
     required: true
 
 - type: input
   attributes:
     label: Device model
-    placeholder: iPhone 15 Pro Max
+    placeholder: iPhone 16 Pro Max
   validations:
     required: true
 
@@ -47,7 +47,7 @@ body:
 - type: input
   attributes:
     label: Tweak version
-    placeholder: uYouEnhanced - v19.xx.x-3.0.3
+    placeholder: uYouEnhanced - v19.xx.x-3.0.4
     description: "**latest or newest is NOT a version number!**"
   validations:
     required: true
@@ -108,6 +108,17 @@ body:
       - ✅ Yes, I can reproduce this issue in the official YouTube from AppStore 
   validations:
     required: true
+
+- type: dropdown
+  attributes:
+    label: Select the configuration used for building or obtaining the uYouEnhanced ipa. (Optional)
+    options:
+      - buildapp.yml (GitHub Actions — build method as suggested by [Wiki - Building](https://github.com/arichornlover/uYouEnhanced/wiki/Building))
+      - build.sh (Shell script)
+      - AltStore Source (obtained from https://raw.githubusercontent.com/arichornlover/arichornlover.github.io/main/apps.json)
+      - Other (obtained from untrusted or potentially unsafe sources such as phishing sites, unknown individuals, or unofficial channels.)
+  validations:
+    required: false
 
 - type: textarea
   attributes:
